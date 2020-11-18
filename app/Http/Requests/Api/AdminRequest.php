@@ -6,7 +6,7 @@ use App\Http\Requests\FormRequest;
 use App\Rules\Phone;
 use Illuminate\Validation\Rule;
 
-class UserRequest extends FormRequest
+class AdminRequest extends FormRequest
 {
 
     /**
@@ -20,24 +20,24 @@ class UserRequest extends FormRequest
             case 'GET':
             {
                 return [
-                    'id' => ['required, exists:users,id']
+                    'id' => ['required, exists:admins,id']
                 ];
             }
             case 'POST':
             {
                 return [
-                    'name' => ['required', 'string', 'min:5', 'max:12', 'unique:users,name'],
+                    'name' => ['required', 'string', 'min:5', 'max:12', 'unique:admins,name'],
                     'password' => ['required', 'confirmed', 'max:16', 'min:6'],
-                    'username' => ['required', 'string', 'min:5', 'max:12', 'unique:users,username'],
+                    'username' => ['required', 'string', 'min:5', 'max:12', 'unique:admins,username'],
                     'real_name' => ['string'],
-                    'email' => ['email:rfc,dns', 'unique:users,email'],
+                    'email' => ['email:rfc,dns', 'unique:admins,email'],
                     'gender' => [
                         'required',
                         Rule::in(['male', 'female']),
                     ],
                     'phone' => [
                         'required',
-                        'unique:users',
+                        'unique:admins',
                         new Phone(),
                     ],
                 ];

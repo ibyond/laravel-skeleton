@@ -11,7 +11,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject
+class Admin extends Authenticatable implements JWTSubject
 {
     use HasFactory,
         SoftDeletes,
@@ -106,7 +106,7 @@ class User extends Authenticatable implements JWTSubject
     {
         parent::boot();
 
-        static::saving(function (User $user) {
+        static::saving(function (Admin $user) {
             $user->username = $user->username ?? $user->email;
             $user->name = $user->name ?? $user->real_name ?? $user->username;
 
