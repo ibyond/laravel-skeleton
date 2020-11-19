@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Traits\DateTime;
+use App\Traits\HasDateTimeFormatter;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,7 +15,7 @@ class Admin extends Authenticatable implements JWTSubject
 {
     use HasFactory,
         SoftDeletes,
-        DateTime,
+        HasDateTimeFormatter,
         Notifiable;
 
     // 性别
@@ -92,14 +92,6 @@ class Admin extends Authenticatable implements JWTSubject
     public function getDisplayStatusAttribute()
     {
         return self::STATUS_LABELS[$this->status ?? self::STATUS_ACTIVE];
-    }
-
-    public function createApiToken(string $name = null)
-    {
-        return [
-            'token_type' => 'Bearer',
-            'token' => $this->createToken($name ?? $this->username)->plainTextToken,
-        ];
     }
 
     protected static function boot()

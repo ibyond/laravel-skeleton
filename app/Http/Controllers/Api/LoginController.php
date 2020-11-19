@@ -3,11 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Jobs\Api\SaveLastTokenJob;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 
 class LoginController extends Controller
@@ -43,27 +40,6 @@ class LoginController extends Controller
         return $this->failed('账号或密码错误', 400);
     }
 
-    //用户登录
-    public function adminlLogin(Request $request)
-    {
-        //获取当前守护的名称
-        $present_guard = Auth::getDefaultDriver();
-        $token = Auth::claims(['guard' => $present_guard])->attempt(['name' => $request->name, 'password' => $request->password]);
-        if ($token) {
-            //如果登陆，先检查原先是否有存token，有的话先失效，然后再存入最新的token
-            $user = Auth::user();
-            if ($user->token) {
-                try {
-                    Auth::setToken($user->token)->invalidate();
-                } catch (TokenExpiredException $e) {
-                    //因为让一个过期的token再失效，会抛出异常，所以我们捕捉异常，不需要做任何处理
-                }
-            }
-            SaveLastTokenJob::dispatch($user, $token);
-            return $this->setStatusCode(201)->success($this->respondWithToken($token));
-        }
-        return $this->failed('账号或密码错误', 400);
-    }
     /**
      * Get the token array structure.
      *

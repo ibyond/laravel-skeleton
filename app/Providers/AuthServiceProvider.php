@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Laravel\Horizon\Horizon;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -25,6 +26,19 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Horizon::auth(function($request) {
+            if (app()->environment('local')) {
+                return true;
+            } else {
+                $clientIp=$request->getClientIp();
+                return $clientIp === config('horizon.ip');
+            }
+        });
+
+        Gate::define('viewHorizon', function ($user) {
+            return in_array($user->email, [
+                'taylor@laravel.com',
+            ]);
+        });
     }
 }

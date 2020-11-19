@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\Api\UserRequest;
 use App\Models\User;
 use App\Http\Resources\User as UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use phpDocumentor\Reflection\Types\Collection;
 
 class UserController extends Controller
 {

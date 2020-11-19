@@ -20,11 +20,6 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
-    public function test()
-    {
-        return 1278783;
-    }
-
     /**
      * @param UserRequest $request
      *
@@ -44,6 +39,6 @@ class RegisterController extends Controller
     public function adminStore(AdminRequest $request)
     {
         Admin::create($request->all());
-        return $this->setStatusCode(201)->success('用户注册成功!');
+        return $this->setStatusCode(201)->success('后台用户注册成功!');
     }
 }

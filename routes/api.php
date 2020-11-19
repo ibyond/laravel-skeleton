@@ -18,7 +18,6 @@ use App\Http\Controllers\Api\AdminController;
 |
 */
 
-
 Route::prefix('v1')->group(function () {
 
     Route::middleware('api.guard')->group(function () {
@@ -38,22 +37,22 @@ Route::prefix('v1')->group(function () {
         });
     });
 
-//    Route::middleware('admin.guard')->group(function () {
-//        //管理员注册
-//        Route::post('/admins', [LogoutController::class, 'adminStore'])->name('admins.store');
-//        //管理员登录
-//        Route::post('/admin/login', [LogoutController::class, 'adminLogin'])->name('admins.login');
-//        Route::middleware('token.refresh')->group(function () {
-//            //当前管理员信息
-//            Route::get('/admins/info', [AdminController::class, 'info'])->name('admins.info');
-//            //管理员列表
-//            Route::get('/admins', [AdminController::class, 'index'])->name('admins.index');
-//            //管理员信息
-//            Route::get('/admins/{user}', [AdminController::class, 'show'])->name('admins.show');
-//            //管理员退出
-//            Route::get('/admins/logout', [LogoutController::class, 'AdminLogout'])->name('admins.logout');
-//        });
-//    });
+    Route::middleware('admin.guard')->group(function () {
+        //管理员注册
+        Route::post('/admins', [RegisterController::class, 'adminStore'])->name('admins.store');
+        //管理员登录
+        Route::post('/admins/login', [LoginController::class, 'login'])->name('admins.login');
+        Route::middleware('token.refresh')->group(function () {
+            //当前管理员信息
+            Route::get('/admins/info', [AdminController::class, 'info'])->name('admins.info');
+            //管理员列表
+            Route::get('/admins', [AdminController::class, 'index'])->name('admins.index');
+            //管理员退出
+            Route::get('/admins/logout', [LogoutController::class, 'logout'])->name('admins.logout');
+            //管理员信息
+            Route::get('/admins/{user}', [AdminController::class, 'show'])->name('admins.show');
+        });
+    });
 });
 
 

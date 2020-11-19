@@ -5,6 +5,7 @@ namespace App\Http\Middleware\Api;
 use App\Jobs\Api\SaveLastTokenJob;
 use Auth;
 use Closure;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
@@ -17,13 +18,14 @@ class RefreshTokenMiddleware extends BaseMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure $next
+     * @param Request $request
+     * @param Closure $next
      *
      * @return mixed
-     * @throws \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException
+     * @throws UnauthorizedHttpException
      *
      * @throws TokenInvalidException
+     * @throws JWTException
      */
     public function handle($request, Closure $next)
     {
@@ -43,12 +45,11 @@ class RefreshTokenMiddleware extends BaseMiddleware
 
         //如果不包含guard字段或者guard所对应的值与当前的guard守护值不相同
         //证明是不属于当前guard守护的token
-        if (empty($payload['guard']) || $payload['guard'] != $present_guard) {
+        if (empty($payload['guard']) || $payload['guard'] !== $present_guard) {
             throw new TokenInvalidException();
         }
         //使用 try 包裹，以捕捉 token 过期所抛出的 TokenExpiredException  异常
         //2. 此时进入的都是属于当前guard守护的token
-
 
         try {
             // 检测用户的登录状态，如果正常则通过

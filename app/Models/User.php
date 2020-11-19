@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Traits\DateTime;
+use App\Traits\HasDateTimeFormatter;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,7 +15,7 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasFactory,
         SoftDeletes,
-        DateTime,
+        HasDateTimeFormatter,
         Notifiable;
 
     // 性别
